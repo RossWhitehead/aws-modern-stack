@@ -44,9 +44,23 @@ eksctl create iamserviceaccount \
   --cluster=$NAME \
   --namespace=kube-system \
   --name=aws-load-balancer-controller \
-  --attach-policy-arn=arn:aws:iam::$(ACCOUNT):policy/AWSLoadBalancerControllerIAMPolicy \
+  --attach-policy-arn=arn:aws:iam::$ACCOUNT:policy/AWSLoadBalancerControllerIAMPolicy \
   --override-existing-serviceaccounts \
   --approve
+```
+
+Install cert-manager to inject certificate configuration into the webhooks.
+
+```bash
+kubectl apply \
+    --validate=false \
+    -f https://github.com/jetstack/cert-manager/releases/download/v1.1.1/cert-manager.yaml
+```
+
+Install the controller.
+
+```bash
+kubectl apply -f v2_2_0_full.yaml
 ```
 
 ## Configure kubeconfig
@@ -54,4 +68,3 @@ eksctl create iamserviceaccount \
 ```bash
 aws eks --region $REGION update-kubeconfig --name $NAME
 ```
-
